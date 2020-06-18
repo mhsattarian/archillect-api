@@ -1,6 +1,6 @@
 name = "archillect"
 type = "javascript"
-account_id = ""
+account_id = "a823ac72d095df42b200c8e74eb7981e"
 workers_dev = true
 route = ""
 zone_id = ""
