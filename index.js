@@ -15,13 +15,12 @@ const buildURL = url => {
 
 
 /**
- * Respond with hello worker text
+ * Response with the raw image
  * @param {Request} request
  */
-async function imgHandler(request) {
+async function imgDownloaderHandler(request) {
   const { url } = request;
   const parts = url.split('/');
-
   
   if (parts.length !== 5 || !parts[4].includes('img')) {
     // this is a regular request. forward it.
@@ -48,15 +47,42 @@ async function imgHandler(request) {
 }
 
 /**
- * Respond with hello worker text
+ * Adds a download button to image #sources section
+ * @param {Request} request
+ */
+async function imgHandler(request) {
+  const { url } = request;
+  const parts = url.split('/');
+  const dropResponse = await fetch(buildURL(url));
+  const rewriter = new HTMLRewriter();
+  return rewriter.on('#sources',{
+    element(element) {
+      element.prepend(`<a href="/${parts[3]}/img">⬇</a>`, {html: true});
+    }
+  }).transform(dropResponse);
+}
+
+/**
+ * Adds a download button to image #sources section
+ * @param {Request} request
+ */
+async function mainHandler(request) {
+  const { url } = request;
+  const parts = url.split('/');
+  return fetch(buildURL(url));
+}
+
+/**
+ * main Handler which controls the routes
  * @param {Request} request
  */
 async function handleRequest(request) {
   const r = new Router()
   // Replace with the approriate paths and handlers
-  // r.get('/', () => fetch(buildURL(url))) // return a default message for the root route
   r.get('/api/.*', () => apiHandler(request))
-  r.get('/.*', () => imgHandler(request))
+  r.get('/.[1-9].*/img', () => imgDownloaderHandler(request))
+  r.get('/.[1-9].*', () => imgHandler(request))
+  r.get('/.*', () => mainHandler(request))
 
   const resp = await r.route(request)
   return resp

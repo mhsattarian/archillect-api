@@ -10,24 +10,20 @@ const buildURL = url => {
 }
 
 /**
- * Respond with hello worker text
+ * Response with the last archillect image id
  * @param {Request} request
  */
-async function lastHandler(request) {
+async function lastIdHandler(request) {
   const { url } = request
   const parts = url.split('/')
 
   if (parts.length < 5 || !parts[3].includes('api')) {
-    // this is a regular request. forward it.
     return new Response('Not found', { status: 404 })
   }
 
-  // otherwise take it a content respose, we need to fetch it and return the image
-  // const dropURL = parts.slice(0, 4).join('/');
-  const dropResponse = await fetch(buildURL('https://archillect.com/'))
-
-  const rewriter = new HTMLRewriter()
-  let flag = false
+  const dropResponse = await fetch(buildURL('https://archillect.com/'));
+  const rewriter = new HTMLRewriter();
+  let flag = false;
   await rewriter
     .on('a.post', {
       element(element) {
@@ -40,15 +36,7 @@ async function lastHandler(request) {
     .transform(dropResponse)
     .text()
 
-  return new Response(`${lastID}`, { status: 404 })
-
-  // return new Response(JSON.stringify(parts), {
-  //   headers: { 'content-type': 'text/plain' },
-  // })
-}
-
-async function handler(request) {
-  return new Response(JSON.stringify(request), {
+  return new Response(JSON.stringify({lastID}), {
     headers: { 'content-type': 'text/plain' },
   })
 }
@@ -56,10 +44,7 @@ async function handler(request) {
 module.exports = async function handleRequest(request) {
   const r = new Router()
   // Replace with the approriate paths and handlers
-  // r.get('/', () => fetch(buildURL(url))) // return a default message for the root route
-  r.get('/api/last', () => lastHandler(request))
-  r.get('/api/', () => handler(request))
-  // r.get('/api/.*', () => imgHandler(request))
+  r.get('/api/last', () => lastIdHandler(request))
 
   const resp = await r.route(request)
   return resp
