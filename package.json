@@ -5,7 +5,10 @@
   "description": "A template for kick starting a Cloudflare Workers project",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "wrangler preview",
+    "preview": "wrangler preview",
+    "build": "wrangler build",
+    "publish": "wrangler publish",
     "format": "prettier --write '**/*.{js,css,json,md}'"
   },
   "author": "Mohammad H. Sattarian <mh_sattarian@outlook.com>",

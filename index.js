@@ -1,3 +1,6 @@
+const Router = require('./router');
+const apiHandler = require('./api');
+
 addEventListener('fetch', event => {
   event.respondWith(handleRequest(event.request))
 });
@@ -15,7 +18,7 @@ const buildURL = url => {
  * Respond with hello worker text
  * @param {Request} request
  */
-async function handleRequest(request) {
+async function imgHandler(request) {
   const { url } = request;
   const parts = url.split('/');
 
@@ -36,10 +39,25 @@ async function handleRequest(request) {
       imagePath = element.getAttribute('content');
     }
   }).transform(dropResponse).text();
-  
+
   return fetch(imagePath);
 
   // return new Response(JSON.stringify(parts), {
   //   headers: { 'content-type': 'text/plain' },
   // })
+}
+
+/**
+ * Respond with hello worker text
+ * @param {Request} request
+ */
+async function handleRequest(request) {
+  const r = new Router()
+  // Replace with the approriate paths and handlers
+  // r.get('/', () => fetch(buildURL(url))) // return a default message for the root route
+  r.get('/api/.*', () => apiHandler(request))
+  r.get('/.*', () => imgHandler(request))
+
+  const resp = await r.route(request)
+  return resp
 }
