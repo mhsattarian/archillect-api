@@ -41,10 +41,29 @@ async function lastIdHandler(request) {
   })
 }
 
+/**
+ * Response with a random archillect image
+ * @param {Request} request
+ */
+async function randomHandler(request) {
+  const { url } = request
+  const parts = url.split('/')
+
+  if (parts.length < 5 || !parts[3].includes('api')) {
+    return new Response('Not found', { status: 404 })
+  }
+
+  const randomID = Math.floor(Math.random() * lastID) + 1;
+  console.log(randomID)
+
+  return Response.redirect(`https://archillect.mhsattarian.workers.dev/${randomID}/img`, 301);
+}
+
 module.exports = async function handleRequest(request) {
   const r = new Router()
   // Replace with the approriate paths and handlers
   r.get('/api/last', () => lastIdHandler(request))
+  r.get('/api/random', () => randomHandler(request))
 
   const resp = await r.route(request)
   return resp
