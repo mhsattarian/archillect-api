@@ -54,7 +54,6 @@ async function randomHandler(request) {
   }
 
   const randomID = Math.floor(Math.random() * lastID) + 1;
-  console.log(randomID)
 
   return Response.redirect(`https://archillect.mhsattarian.workers.dev/${randomID}/img`, 301);
 }
