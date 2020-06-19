@@ -6,10 +6,10 @@
 
 [Archillect API](https://archillect.mhsattarian.workers.dev/) uses [Cloudflare workers](https://workers.cloudflare.com/) as an Intermediate layer to add the following options to the platform:
 
-- `:id/img` endpoint to access raw image files
+- [`:id/img`](https://archillect.mhsattarian.workers.dev/1/img) endpoint to access raw image files
 - `Download` button on image pages to access above endpoint more easily
-- `/api/last` api endpoint to fetch the last archillect image ID
-- `/api/random` api endpoint to fetch a random raw image
+- [`/api/last`](https://archillect.mhsattarian.workers.dev/api/last) api endpoint to fetch the last archillect image ID
+- [`/api/random`](https://archillect.mhsattarian.workers.dev/api/random) api endpoint to fetch a random raw image
 
 so Archillect API is actually exactly as Archillect website, with only the above few modifications.
 
